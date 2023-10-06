@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.felipedevos.crud.entities.Category;
 import com.felipedevos.crud.entities.Order;
+import com.felipedevos.crud.entities.Product;
 import com.felipedevos.crud.entities.User;
 import com.felipedevos.crud.entities.enums.OrderStatus;
 import com.felipedevos.crud.repositories.CategoryRepository;
 import com.felipedevos.crud.repositories.OrderRepository;
+import com.felipedevos.crud.repositories.ProductRepository;
 import com.felipedevos.crud.repositories.UserRepository;
 
 @Configuration
@@ -28,6 +30,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -39,10 +44,21 @@ public class TestConfig implements CommandLineRunner {
 		
 		Category cat1 = new Category(null, "Electronics");
 		Category cat2 = new Category(null, "Books");
+		Category cat3 = new Category(null, "Computers");
+		
+		Product p1 = new Product(null, "The Lord of the Rings", "Lorem ipsum", 90.5, "");
+		Product p2 = new Product(null, "Macbook", "Lorem ipsum", 1250.0, "");
 
 		userRepository.saveAll(Arrays.asList(u1, u2));
 		orderRepository.saveAll(Arrays.asList(o1, o2));
-		categoryRepository.saveAll(Arrays.asList(cat1,cat2));
+		categoryRepository.saveAll(Arrays.asList(cat1,cat2, cat3));
+		productRepository.saveAll(Arrays.asList(p1,p2));
+		
+		p1.getCategories().add(cat2);
+		p2.getCategories().add(cat1);
+		p2.getCategories().add(cat3);
+		
+		productRepository.saveAll(Arrays.asList(p1,p2));
 	}
 
 }
